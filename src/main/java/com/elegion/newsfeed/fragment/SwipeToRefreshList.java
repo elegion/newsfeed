@@ -25,6 +25,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -34,7 +35,8 @@ import com.elegion.newsfeed.R;
 /**
  * @author Daniel Serdyukov
  */
-public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SyncStatusObserver {
+public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SyncStatusObserver,
+        AdapterView.OnItemClickListener {
 
     private SwipeRefreshLayout mRefresher;
 
@@ -68,12 +70,14 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
         super.onResume();
         mRefresher.setOnRefreshListener(this);
         mSyncMonitor = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE, this);
+        mListView.setOnItemClickListener(this);
     }
 
     @Override
     public void onPause() {
         mRefresher.setOnRefreshListener(null);
         ContentResolver.removeStatusChangeListener(mSyncMonitor);
+        mListView.setOnItemClickListener(null);
         super.onPause();
     }
 
@@ -90,6 +94,11 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
                 onSyncStatusChanged(mAccount, ContentResolver.isSyncActive(mAccount, AppDelegate.CONTENT_AUTHORITY));
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     protected void onRefresh(Account account) {

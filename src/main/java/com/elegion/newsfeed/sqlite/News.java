@@ -16,6 +16,7 @@
 
 package com.elegion.newsfeed.sqlite;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -31,6 +32,26 @@ public class News extends SQLiteTable {
 
     public News() {
         super(TABLE_NAME);
+    }
+
+    public static long getId(Cursor c) {
+        return c.getLong(c.getColumnIndex(Columns._ID));
+    }
+
+    public static String getTitle(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.TITLE));
+    }
+
+    public static String getAuthor(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.AUTHOR));
+    }
+
+    public static String getLink(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.LINK));
+    }
+
+    public static long getPubDate(Cursor c) {
+        return c.getLong(c.getColumnIndex(Columns.PUB_DATE));
     }
 
     @Override

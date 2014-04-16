@@ -2,5 +2,6 @@
 <resources>
 
     <item name="feeds_loader" type="id" />
+    <item name="news_loader" type="id" />
 
 </resources>

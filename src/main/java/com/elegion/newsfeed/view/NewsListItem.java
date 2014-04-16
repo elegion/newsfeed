@@ -19,13 +19,12 @@ package com.elegion.newsfeed.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.elegion.newsfeed.R;
-import com.elegion.newsfeed.sqlite.Feed;
+import com.elegion.newsfeed.sqlite.News;
 import com.elegion.newsfeed.widget.CursorBinder;
 
 import java.text.DateFormat;
@@ -34,34 +33,24 @@ import java.util.Date;
 /**
  * @author Daniel Serdyukov
  */
-public class FeedListItem extends LinearLayout implements CursorBinder {
+public class NewsListItem extends LinearLayout implements CursorBinder {
 
     private TextView mTitle;
 
-    private TextView mLink;
+    private TextView mAuthor;
 
     private TextView mPubDate;
 
-    public FeedListItem(Context context, AttributeSet attrs) {
+    public NewsListItem(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     @SuppressLint("StringFormatMatches")
     public void bindCursor(Cursor c) {
-        final String title = Feed.getTitle(c);
-        if (!TextUtils.isEmpty(title)) {
-            mTitle.setText(title);
-        } else {
-            mTitle.setText(getResources().getString(R.string.feed_p, Feed.getId(c)));
-        }
-        final String link = Feed.getLink(c);
-        if (!TextUtils.isEmpty(link)) {
-            mLink.setText(link);
-        } else {
-            mLink.setText(Feed.getRssLink(c));
-        }
-        final long pubDate = Feed.getPubDate(c);
+        mTitle.setText(News.getTitle(c));
+        mAuthor.setText(News.getAuthor(c));
+        final long pubDate = News.getPubDate(c);
         if (pubDate > 0) {
             mPubDate.setText(DateFormat.getDateTimeInstance().format(new Date(pubDate)));
         }
@@ -71,7 +60,7 @@ public class FeedListItem extends LinearLayout implements CursorBinder {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mTitle = (TextView) findViewById(R.id.title);
-        mLink = (TextView) findViewById(R.id.link);
+        mAuthor = (TextView) findViewById(R.id.author);
         mPubDate = (TextView) findViewById(R.id.pub_date);
     }
 

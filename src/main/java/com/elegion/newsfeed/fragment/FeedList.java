@@ -20,13 +20,17 @@ import android.accounts.Account;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 
 import com.elegion.newsfeed.AppDelegate;
 import com.elegion.newsfeed.R;
+import com.elegion.newsfeed.activity.NewsActivity;
 import com.elegion.newsfeed.sqlite.Feed;
 import com.elegion.newsfeed.widget.CursorBinderAdapter;
 
@@ -68,6 +72,13 @@ public class FeedList extends SwipeToRefreshList implements LoaderManager.Loader
         if (loader.getId() == R.id.feeds_loader) {
             mListAdapter.swapCursor(null);
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final Intent intent = new Intent(getActivity(), NewsActivity.class);
+        intent.putExtra(NewsActivity.EXTRA_FEED_ID, id);
+        startActivity(intent);
     }
 
     @Override

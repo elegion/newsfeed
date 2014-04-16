@@ -39,14 +39,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@android:color/holo_blue_dark" />
 
             <TextView
                 android:id="@+id/pub_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@android:color/holo_red_dark" />
 
         </LinearLayout>
 

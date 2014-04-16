@@ -17,7 +17,6 @@
 package com.elegion.newsfeed.rss;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -54,7 +53,9 @@ public final class RssDate {
             "EEE,dd-MMM-yy HH:mm:ss z",
             "EEE,dd-MMM-yyyy HH:mm:ss z",
             "EEE, dd-MM-yyyy HH:mm:ss z",
-            "EEE MMM d yyyy HH:mm:ss z"
+            "EEE MMM d yyyy HH:mm:ss z",
+            "dd MMM yyyy HH:mm:ss zzz",
+            "dd MMM yyyy HH:mm:ss z",
     };
 
     private RssDate() {
@@ -65,13 +66,13 @@ public final class RssDate {
             try {
                 return DATE_FORMAT.get().parse(value);
             } catch (ParseException e) {
-                Log.e(RssDate.class.getSimpleName(), e.getMessage(), e);
+                // do nothing
             }
             for (String formatString : COMPATIBLE_DATE_FORMATS) {
                 try {
                     return new SimpleDateFormat(formatString, Locale.US).parse(value);
                 } catch (ParseException e) {
-                    Log.e(RssDate.class.getSimpleName(), e.getMessage(), e);
+                    // do nothing
                 }
             }
         }

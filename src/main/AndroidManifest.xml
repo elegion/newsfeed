@@ -19,7 +19,9 @@
 
         <activity
             android:name=".activity.FeedsActivity"
-            android:label="@string/feeds">
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:label="@string/feeds"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -28,7 +30,9 @@
 
         <activity
             android:name=".activity.NewsActivity"
-            android:label="@string/news" />
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:label="@string/news"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".sqlite.SQLiteContentProvider"
