@@ -2,5 +2,12 @@
 <resources>
 
     <string name="app_name">NewsFeed</string>
+    <string name="feeds">Ленты</string>
+    <string name="news">Новости</string>
+    <string name="add">Добавить</string>
+    <string name="add_feed">Добавить ленту</string>
+    <string name="feed_link">Адрес</string>
+    <string name="feed_icon">Иконка ленты</string>
+    <string name="feed_p">Лента #%1$d</string>
 
 </resources>

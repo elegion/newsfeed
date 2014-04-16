@@ -16,7 +16,11 @@
 
 package com.elegion.newsfeed;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Application;
+import android.content.ContentResolver;
+import android.os.Bundle;
 
 /**
  * @author Daniel Serdyukov
@@ -24,5 +28,17 @@ import android.app.Application;
 public class AppDelegate extends Application {
 
     public static final String ACCOUNT_TYPE = "com.elegion.newsfeed.account";
+
+    public static final String CONTENT_AUTHORITY = "com.elegion.newsfeed";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        final AccountManager am = AccountManager.get(this);
+        final Account account = new Account(getString(R.string.app_name), ACCOUNT_TYPE);
+        if (am.addAccountExplicitly(account, getPackageName(), new Bundle())) {
+            ContentResolver.setSyncAutomatically(account, CONTENT_AUTHORITY, true);
+        }
+    }
 
 }

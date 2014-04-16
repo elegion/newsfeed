@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.elegion.newsfeed.activity;
+package com.elegion.newsfeed.widget;
 
-import android.app.Activity;
-import android.os.Bundle;
-
-import com.elegion.newsfeed.R;
+import android.database.Cursor;
 
 /**
  * @author Daniel Serdyukov
  */
-public class MainActivity extends Activity {
+public interface CursorBinder {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_single_frame);
-    }
+    void bindCursor(Cursor c);
 
 }
