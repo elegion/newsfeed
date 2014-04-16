@@ -25,6 +25,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.os.Bundle;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,7 +78,9 @@ public class SQLiteContentProvider extends ContentProvider {
         if (table != null) {
             final long lastId = table.insert(mHelper.getWritableDatabase(), values);
             getContext().getContentResolver().notifyChange(uri, null);
-            table.onContentChanged(SQLiteOperation.INSERT, getContext());
+            final Bundle extras = new Bundle();
+            extras.putLong(SQLiteOperation.KEY_LAST_ID, lastId);
+            table.onContentChanged(getContext(), SQLiteOperation.INSERT, extras);
             return ContentUris.withAppendedId(uri, lastId);
         }
         throw new SQLiteException("Unknown uri " + uri);
@@ -90,7 +93,9 @@ public class SQLiteContentProvider extends ContentProvider {
             final int affectedRows = table.delete(mHelper.getWritableDatabase(), where, whereArgs);
             if (affectedRows > 0) {
                 getContext().getContentResolver().notifyChange(uri, null);
-                table.onContentChanged(SQLiteOperation.DELETE, getContext());
+                final Bundle extras = new Bundle();
+                extras.putLong(SQLiteOperation.KEY_AFFECTED_ROWS, affectedRows);
+                table.onContentChanged(getContext(), SQLiteOperation.DELETE, extras);
             }
             return affectedRows;
         }
@@ -104,7 +109,9 @@ public class SQLiteContentProvider extends ContentProvider {
             final int affectedRows = table.update(mHelper.getWritableDatabase(), values, where, whereArgs);
             if (affectedRows > 0) {
                 getContext().getContentResolver().notifyChange(uri, null);
-                table.onContentChanged(SQLiteOperation.UPDATE, getContext());
+                final Bundle extras = new Bundle();
+                extras.putLong(SQLiteOperation.KEY_AFFECTED_ROWS, affectedRows);
+                table.onContentChanged(getContext(), SQLiteOperation.UPDATE, extras);
             }
             return affectedRows;
         }

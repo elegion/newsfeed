@@ -48,7 +48,7 @@ public class FeedListItem extends LinearLayout implements CursorBinder {
     @Override
     @SuppressLint("StringFormatMatches")
     public void bindCursor(Cursor c) {
-        Log.d(FeedListItem.class.getSimpleName(), DatabaseUtils.dumpCurrentRowToString(c));
+        Log.i(FeedListItem.class.getSimpleName(), DatabaseUtils.dumpCurrentRowToString(c));
         final String title = Feed.getTitle(c);
         if (!TextUtils.isEmpty(title)) {
             mTitle.setText(title);

@@ -40,7 +40,11 @@ public class News extends SQLiteTable {
                 + Columns.TITLE + " text, "
                 + Columns.LINK + " text, "
                 + Columns.AUTHOR + " text, "
-                + Columns.PUB_DATE + " text);");
+                + Columns.PUB_DATE + " integer, "
+                + Columns.FEED_ID + " integer);");
+        db.execSQL("create index if not exists " +
+                TABLE_NAME + "_" + Columns.FEED_ID + "_index" +
+                " on " + TABLE_NAME + "(" + Columns.FEED_ID + ");");
     }
 
     public interface Columns extends BaseColumns {
@@ -48,6 +52,7 @@ public class News extends SQLiteTable {
         String LINK = "link";
         String PUB_DATE = "pubDate";
         String AUTHOR = "author";
+        String FEED_ID = "feedId";
     }
 
 }

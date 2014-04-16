@@ -4,4 +4,5 @@
     android:allowParallelSyncs="false"
     android:contentAuthority="com.elegion.newsfeed"
     android:isAlwaysSyncable="true"
+    android:supportsUploading="false"
     android:userVisible="true" />

@@ -28,6 +28,7 @@ import android.util.Log;
 
 import com.elegion.newsfeed.AppDelegate;
 import com.elegion.newsfeed.R;
+import com.elegion.newsfeed.sync.SyncAdapter;
 
 /**
  * @author Daniel Serdyukov
@@ -63,13 +64,16 @@ public class Feed extends SQLiteTable {
     }
 
     @Override
-    public void onContentChanged(int operation, Context context) {
+    public void onContentChanged(Context context, int operation, Bundle extras) {
         if (operation == INSERT) {
-            Log.e(Feed.class.getSimpleName(), "INSERT, requestSync");
+            extras.keySet();
+            Log.e(Feed.class.getSimpleName(), "INSERT_" + extras);
+            final Bundle syncExtras = new Bundle();
+            syncExtras.putLong(SyncAdapter.KEY_FEED_ID, extras.getLong(KEY_LAST_ID, -1));
             ContentResolver.requestSync(new Account(
                     context.getString(R.string.app_name),
                     AppDelegate.ACCOUNT_TYPE
-            ), AppDelegate.CONTENT_AUTHORITY, new Bundle());
+            ), AppDelegate.CONTENT_AUTHORITY, syncExtras);
         }
     }
 
@@ -81,7 +85,7 @@ public class Feed extends SQLiteTable {
                 + Columns.LINK + " text, "
                 + Columns.IMAGE_URL + " text, "
                 + Columns.LANGUAGE + " text, "
-                + Columns.PUB_DATE + " text, "
+                + Columns.PUB_DATE + " integer, "
                 + Columns.RSS_LINK + " text unique on conflict ignore)");
     }
 

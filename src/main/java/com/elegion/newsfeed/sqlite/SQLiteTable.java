@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.provider.BaseColumns;
 
 /**
@@ -49,7 +50,7 @@ public abstract class SQLiteTable implements SQLiteOperation {
         return db.update(mName, values, where, whereArgs);
     }
 
-    public void onContentChanged(int operation, Context context) {
+    public void onContentChanged(Context context, int operation, Bundle extras) {
 
     }
 

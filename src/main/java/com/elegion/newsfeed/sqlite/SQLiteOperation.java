@@ -27,4 +27,8 @@ public interface SQLiteOperation {
 
     int DELETE = 3;
 
+    String KEY_LAST_ID = "com.elegion.newsfeed.sqlite.KEY_LAST_ID";
+
+    String KEY_AFFECTED_ROWS = "com.elegion.newsfeed.sqlite.KEY_AFFECTED_ROWS";
+
 }
