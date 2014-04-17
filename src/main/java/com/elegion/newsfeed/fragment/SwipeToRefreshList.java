@@ -20,6 +20,7 @@ import android.accounts.Account;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.SyncStatusObserver;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -31,12 +32,14 @@ import android.widget.ListView;
 
 import com.elegion.newsfeed.AppDelegate;
 import com.elegion.newsfeed.R;
+import com.elegion.newsfeed.view.SwipeToDismissCallback;
+import com.elegion.newsfeed.view.SwipeToDismissController;
 
 /**
  * @author Daniel Serdyukov
  */
 public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SyncStatusObserver,
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, SwipeToDismissCallback {
 
     private SwipeRefreshLayout mRefresher;
 
@@ -45,6 +48,8 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
     private Object mSyncMonitor;
 
     private Account mAccount;
+
+    private SwipeToDismissController mSwipeToDismissController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +67,7 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light
         );
+        mSwipeToDismissController = new SwipeToDismissController(mListView, this);
         mAccount = new Account(getString(R.string.app_name), AppDelegate.ACCOUNT_TYPE);
     }
 
@@ -71,6 +77,8 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
         mRefresher.setOnRefreshListener(this);
         mSyncMonitor = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE, this);
         mListView.setOnItemClickListener(this);
+        mListView.setOnTouchListener(mSwipeToDismissController);
+        mListView.setOnScrollListener(mSwipeToDismissController);
     }
 
     @Override
@@ -78,6 +86,8 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
         mRefresher.setOnRefreshListener(null);
         ContentResolver.removeStatusChangeListener(mSyncMonitor);
         mListView.setOnItemClickListener(null);
+        mListView.setOnTouchListener(null);
+        mListView.setOnScrollListener(null);
         super.onPause();
     }
 
@@ -101,6 +111,16 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
 
     }
 
+    @Override
+    public boolean canDismissView(View view, int position) {
+        return false;
+    }
+
+    @Override
+    public void dismissView(View view, int position) {
+
+    }
+
     protected void onRefresh(Account account) {
 
     }
@@ -114,7 +134,13 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
     }
 
     public void setListAdapter(ListAdapter adapter) {
+        final DataSetObserver dataSetObserver = mSwipeToDismissController.getDataSetObserver();
+        final ListAdapter oldAdapter = mListView.getAdapter();
+        if (oldAdapter != null) {
+            oldAdapter.unregisterDataSetObserver(dataSetObserver);
+        }
         mListView.setAdapter(adapter);
+        adapter.registerDataSetObserver(dataSetObserver);
     }
 
 }

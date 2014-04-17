@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <ImageView
+    <com.elegion.newsfeed.widget.FeedIconView
         android:id="@+id/feed_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"

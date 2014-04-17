@@ -82,6 +82,22 @@ public class FeedList extends SwipeToRefreshList implements LoaderManager.Loader
     }
 
     @Override
+    public boolean canDismissView(View view, int position) {
+        return true;
+    }
+
+    @Override
+    public void dismissView(View view, int position) {
+        final Cursor feed = mListAdapter.getCursor();
+        if (feed.moveToPosition(position)) {
+            getActivity().getContentResolver().delete(
+                    Feed.URI, Feed.Columns._ID + "=?",
+                    new String[]{String.valueOf(Feed.getId(feed))}
+            );
+        }
+    }
+
+    @Override
     protected void onRefresh(Account account) {
         ContentResolver.requestSync(account, AppDelegate.CONTENT_AUTHORITY, new Bundle());
     }

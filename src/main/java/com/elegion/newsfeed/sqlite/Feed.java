@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.elegion.newsfeed.AppDelegate;
 import com.elegion.newsfeed.R;
@@ -47,6 +46,10 @@ public class Feed extends SQLiteTable {
         return c.getLong(c.getColumnIndex(Columns._ID));
     }
 
+    public static String getIconUrl(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.IMAGE_URL));
+    }
+
     public static String getTitle(Cursor c) {
         return c.getString(c.getColumnIndex(Columns.TITLE));
     }
@@ -67,7 +70,6 @@ public class Feed extends SQLiteTable {
     public void onContentChanged(Context context, int operation, Bundle extras) {
         if (operation == INSERT) {
             extras.keySet();
-            Log.e(Feed.class.getSimpleName(), "INSERT_" + extras);
             final Bundle syncExtras = new Bundle();
             syncExtras.putLong(SyncAdapter.KEY_FEED_ID, extras.getLong(KEY_LAST_ID, -1));
             ContentResolver.requestSync(new Account(
@@ -87,6 +89,10 @@ public class Feed extends SQLiteTable {
                 + Columns.LANGUAGE + " text, "
                 + Columns.PUB_DATE + " integer, "
                 + Columns.RSS_LINK + " text unique on conflict ignore)");
+        db.execSQL("create trigger if not exists after delete on " + TABLE_NAME +
+                " begin " +
+                " delete from " + News.TABLE_NAME + " where " + News.Columns.FEED_ID + "=old" + Columns._ID + ";" +
+                " end;");
     }
 
     public interface Columns extends BaseColumns {

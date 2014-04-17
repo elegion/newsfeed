@@ -41,8 +41,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String KEY_FEED_ID = "com.elegion.newsfeed.sync.KEY_FEED_ID";
 
-    public SyncAdapter(Context context, boolean autoInitialize) {
-        super(context, autoInitialize);
+    public SyncAdapter(Context context) {
+        super(context, true);
     }
 
     @Override

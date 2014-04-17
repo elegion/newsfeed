@@ -20,27 +20,27 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * @author =Troy= <Daniel Serdyukov>
  * @version 1.0
  */
 public class SyncService extends Service {
 
-    private static final AtomicReference<SyncAdapter> SYNC_ADAPTER = new AtomicReference<SyncAdapter>();
+    private static SyncAdapter sSyncAdapter;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (SYNC_ADAPTER.get() == null) {
-            SYNC_ADAPTER.compareAndSet(null, new SyncAdapter(getApplicationContext(), true));
+        if (sSyncAdapter == null) {
+            synchronized (SyncAdapter.class) {
+                sSyncAdapter = new SyncAdapter(getApplicationContext());
+            }
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return SYNC_ADAPTER.get().getSyncAdapterBinder();
+        return sSyncAdapter.getSyncAdapterBinder();
     }
 
 }

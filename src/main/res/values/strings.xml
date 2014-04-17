@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">NewsFeed</string>
-    <string name="feeds">Ленты</string>
+    <string name="feeds">Ленты новостей</string>
     <string name="news">Новости</string>
     <string name="add">Добавить</string>
     <string name="add_feed">Добавить ленту</string>
