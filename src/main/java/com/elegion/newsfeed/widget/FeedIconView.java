@@ -22,9 +22,9 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.elegion.newsfeed.graphics.BitmapLruCache;
 import com.elegion.newsfeed.graphics.Bitmaps;
 
 import java.io.IOException;
@@ -35,8 +35,6 @@ import java.net.URL;
  * @author Daniel Serdyukov
  */
 public class FeedIconView extends ImageView {
-
-    private static final LruCache<String, Bitmap> BITMAP_CACHE = new LruCacheImpl();
 
     private AsyncTask<String, Void, Bitmap> mLoadIconTask;
 
@@ -80,14 +78,14 @@ public class FeedIconView extends ImageView {
     }
 
     private Bitmap loadIconBackground(String url) {
-        Bitmap bitmap = BITMAP_CACHE.get(url);
+        Bitmap bitmap = BitmapLruCache.getInstance().get(url);
         if (bitmap == null) {
             try {
                 final HttpURLConnection cn = (HttpURLConnection) new URL(url).openConnection();
                 try {
                     bitmap = Bitmaps.decodeStream(cn.getInputStream(), mIconSize);
                     if (bitmap != null) {
-                        BITMAP_CACHE.put(url, bitmap);
+                        BitmapLruCache.getInstance().put(url, bitmap);
                     }
                 } finally {
                     cn.disconnect();
@@ -97,19 +95,6 @@ public class FeedIconView extends ImageView {
             }
         }
         return bitmap;
-    }
-
-    private static final class LruCacheImpl extends LruCache<String, Bitmap> {
-
-        public LruCacheImpl() {
-            super((int) (Runtime.getRuntime().freeMemory() / 4));
-        }
-
-        @Override
-        protected int sizeOf(String key, Bitmap value) {
-            return value.getByteCount();
-        }
-
     }
 
 }

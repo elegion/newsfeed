@@ -7,4 +7,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/add" />
 
+    <item
+        android:id="@+id/action_prefs"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="ifRoom"
+        android:title="@string/settings" />
+
 </menu>

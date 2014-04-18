@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.elegion.newsfeed">
+<manifest
+    package="com.elegion.newsfeed"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -32,6 +33,12 @@
             android:name=".activity.NewsActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:label="@string/news"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SyncSettingsActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:label="@string/general_settings"
             android:screenOrientation="portrait" />
 
         <provider

@@ -40,13 +40,13 @@ public class NewsActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_news);
+        setContentView(R.layout.ac_single_frame);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         mFeedId = getIntent().getLongExtra(EXTRA_FEED_ID, -1);
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.list_frame, NewsList.newInstance(mFeedId))
+                    .add(R.id.frame1, NewsList.newInstance(mFeedId))
                     .commit();
         }
         getLoaderManager().initLoader(R.id.feeds_loader, null, this);

@@ -17,45 +17,34 @@
 package com.elegion.newsfeed.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.elegion.newsfeed.R;
-import com.elegion.newsfeed.fragment.AddFeedPopup;
-import com.elegion.newsfeed.fragment.FeedList;
+import com.elegion.newsfeed.fragment.SyncSettings;
 
 /**
  * @author Daniel Serdyukov
  */
-public class FeedsActivity extends Activity {
+public class SyncSettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_single_frame);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.frame1, new FeedList())
+                    .add(R.id.frame1, new SyncSettings())
                     .commit();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.feeds, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_add) {
-            new AddFeedPopup().show(getFragmentManager(), AddFeedPopup.class.getName());
-            return true;
-        } else if (item.getItemId() == R.id.action_prefs) {
-            startActivity(new Intent(this, SyncSettingsActivity.class));
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

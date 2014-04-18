@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NewsFeed</string>
+    <string name="app_name">e-Rss</string>
     <string name="feeds">Ленты новостей</string>
     <string name="news">Новости</string>
     <string name="add">Добавить</string>
@@ -9,5 +9,13 @@
     <string name="feed_link">Адрес</string>
     <string name="feed_icon">Иконка ленты</string>
     <string name="feed_p">Лента #%1$d</string>
+    <string name="sync">Синхронизация</string>
+    <string name="settings">Настройки</string>
+    <string name="general_settings">Основные настройки</string>
+    <string name="sync_settings_summary">Автоматическая синхронизация и т.д.</string>
+    <string name="auto_sync">Автоматическая синхронизация</string>
+    <string name="auto_sync_summary">Синхронизация через определенные интервалы времени</string>
+    <string name="auto_sync_interval">Интервал синхронизации</string>
+    <string name="auto_sync_interval_summary">Промежуток времени выполнения синхронизации</string>
 
 </resources>

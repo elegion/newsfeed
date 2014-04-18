@@ -103,7 +103,7 @@ public class NewsList extends SwipeToRefreshList implements LoaderManager.Loader
     protected void onRefresh(Account account) {
         final Bundle extras = new Bundle();
         extras.putLong(SyncAdapter.KEY_FEED_ID, mFeedId);
-        ContentResolver.requestSync(account, AppDelegate.CONTENT_AUTHORITY, extras);
+        ContentResolver.requestSync(account, AppDelegate.AUTHORITY, extras);
     }
 
     @Override

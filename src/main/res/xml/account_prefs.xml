@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:persistent="true">
+
+    <PreferenceCategory android:title="@string/general_settings" />
+
+    <PreferenceScreen
+        android:key="com.elegion.newsfeed.KEY_ACCOUNT_SYNC"
+        android:summary="@string/sync_settings_summary"
+        android:title="@string/sync">
+        <intent
+            android:action="com.elegion.newsfeed.ACTION_SYNC_SETTINGS"
+            android:targetClass="com.elegion.newsfeed.activity.SyncSettingsActivity"
+            android:targetPackage="com.elegion.newsfeed" />
+    </PreferenceScreen>
+
+</PreferenceScreen>

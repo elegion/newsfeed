@@ -29,15 +29,19 @@ public class AppDelegate extends Application {
 
     public static final String ACCOUNT_TYPE = "com.elegion.newsfeed.account";
 
-    public static final String CONTENT_AUTHORITY = "com.elegion.newsfeed";
+    public static final String AUTHORITY = "com.elegion.newsfeed";
+
+    public static Account sAccount;
 
     @Override
     public void onCreate() {
         super.onCreate();
         final AccountManager am = AccountManager.get(this);
-        final Account account = new Account(getString(R.string.app_name), ACCOUNT_TYPE);
-        if (am.addAccountExplicitly(account, getPackageName(), new Bundle())) {
-            ContentResolver.setSyncAutomatically(account, CONTENT_AUTHORITY, true);
+        if (sAccount == null) {
+            sAccount = new Account(getString(R.string.news), ACCOUNT_TYPE);
+        }
+        if (am.addAccountExplicitly(sAccount, getPackageName(), new Bundle())) {
+            ContentResolver.setSyncAutomatically(sAccount, AUTHORITY, true);
         }
     }
 

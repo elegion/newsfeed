@@ -16,7 +16,6 @@
 
 package com.elegion.newsfeed.sqlite;
 
-import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,7 +25,6 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 
 import com.elegion.newsfeed.AppDelegate;
-import com.elegion.newsfeed.R;
 import com.elegion.newsfeed.sync.SyncAdapter;
 
 /**
@@ -72,10 +70,7 @@ public class Feed extends SQLiteTable {
             extras.keySet();
             final Bundle syncExtras = new Bundle();
             syncExtras.putLong(SyncAdapter.KEY_FEED_ID, extras.getLong(KEY_LAST_ID, -1));
-            ContentResolver.requestSync(new Account(
-                    context.getString(R.string.app_name),
-                    AppDelegate.ACCOUNT_TYPE
-            ), AppDelegate.CONTENT_AUTHORITY, syncExtras);
+            ContentResolver.requestSync(AppDelegate.sAccount, AppDelegate.AUTHORITY, syncExtras);
         }
     }
 
@@ -91,7 +86,7 @@ public class Feed extends SQLiteTable {
                 + Columns.RSS_LINK + " text unique on conflict ignore)");
         db.execSQL("create trigger if not exists after delete on " + TABLE_NAME +
                 " begin " +
-                " delete from " + News.TABLE_NAME + " where " + News.Columns.FEED_ID + "=old" + Columns._ID + ";" +
+                " delete from " + News.TABLE_NAME + " where " + News.Columns.FEED_ID + "=old." + Columns._ID + ";" +
                 " end;");
     }
 

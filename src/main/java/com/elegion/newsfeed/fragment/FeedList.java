@@ -99,7 +99,7 @@ public class FeedList extends SwipeToRefreshList implements LoaderManager.Loader
 
     @Override
     protected void onRefresh(Account account) {
-        ContentResolver.requestSync(account, AppDelegate.CONTENT_AUTHORITY, new Bundle());
+        ContentResolver.requestSync(account, AppDelegate.AUTHORITY, new Bundle());
     }
 
     @Override

@@ -47,8 +47,6 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
 
     private Object mSyncMonitor;
 
-    private Account mAccount;
-
     private SwipeToDismissController mSwipeToDismissController;
 
     @Override
@@ -68,14 +66,17 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
                 android.R.color.holo_orange_light
         );
         mSwipeToDismissController = new SwipeToDismissController(mListView, this);
-        mAccount = new Account(getString(R.string.app_name), AppDelegate.ACCOUNT_TYPE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mRefresher.setOnRefreshListener(this);
-        mSyncMonitor = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE, this);
+        mSyncMonitor = ContentResolver.addStatusChangeListener(
+                ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
+                        | ContentResolver.SYNC_OBSERVER_TYPE_PENDING,
+                this
+        );
         mListView.setOnItemClickListener(this);
         mListView.setOnTouchListener(mSwipeToDismissController);
         mListView.setOnScrollListener(mSwipeToDismissController);
@@ -93,7 +94,7 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
 
     @Override
     public final void onRefresh() {
-        onRefresh(mAccount);
+        onRefresh(AppDelegate.sAccount);
     }
 
     @Override
@@ -101,7 +102,8 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
         mRefresher.post(new Runnable() {
             @Override
             public void run() {
-                onSyncStatusChanged(mAccount, ContentResolver.isSyncActive(mAccount, AppDelegate.CONTENT_AUTHORITY));
+                onSyncStatusChanged(AppDelegate.sAccount, ContentResolver
+                        .isSyncActive(AppDelegate.sAccount, AppDelegate.AUTHORITY));
             }
         });
     }
