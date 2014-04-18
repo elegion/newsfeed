@@ -20,19 +20,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 
 /**
  * @author Daniel Serdyukov
  */
-public abstract class SQLiteTable implements SQLiteOperation {
+public abstract class SQLiteTableProvider implements SQLiteOperation {
 
     private final String mName;
 
-    public SQLiteTable(String name) {
+    public SQLiteTableProvider(String name) {
         mName = name;
     }
+
+    public abstract Uri getBaseUri();
 
     public Cursor query(SQLiteDatabase db, String[] columns, String where, String[] whereArgs, String orderBy) {
         return db.query(mName, columns, where, whereArgs, null, null, orderBy);

@@ -27,7 +27,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.elegion.newsfeed.rss.RssFeedParser;
-import com.elegion.newsfeed.sqlite.Feed;
+import com.elegion.newsfeed.sqlite.FeedProvider;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -51,7 +51,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i("SyncAdapter", "onPerformSync");
         final long feedId = extras.getLong(KEY_FEED_ID, -1);
         if (feedId > 0) {
-            syncFeeds(provider, syncResult, Feed.Columns._ID + "=?", new String[]{String.valueOf(feedId)});
+            syncFeeds(provider, syncResult, FeedProvider.Columns._ID + "=?", new String[]{String.valueOf(feedId)});
         } else {
             syncFeeds(provider, syncResult, null, null);
         }
@@ -60,9 +60,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private void syncFeeds(ContentProviderClient provider, SyncResult syncResult, String where, String[] whereArgs) {
         try {
             final Cursor feeds = provider.query(
-                    Feed.URI, new String[]{
-                            Feed.Columns._ID,
-                            Feed.Columns.RSS_LINK
+                    FeedProvider.URI, new String[]{
+                            FeedProvider.Columns._ID,
+                            FeedProvider.Columns.RSS_LINK
                     }, where, whereArgs, null
             );
             try {

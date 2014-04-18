@@ -27,7 +27,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.elegion.newsfeed.R;
-import com.elegion.newsfeed.sqlite.Feed;
+import com.elegion.newsfeed.sqlite.FeedProvider;
 
 /**
  * @author Daniel Serdyukov
@@ -57,8 +57,8 @@ public class AddFeedPopup extends DialogFragment {
         final String link = mFeedLink.getText().toString();
         if (!TextUtils.isEmpty(link)) {
             final ContentValues values = new ContentValues();
-            values.put(Feed.Columns.RSS_LINK, link);
-            getActivity().getContentResolver().insert(Feed.URI, values);
+            values.put(FeedProvider.Columns.RSS_LINK, link);
+            getActivity().getContentResolver().insert(FeedProvider.URI, values);
         }
     }
 

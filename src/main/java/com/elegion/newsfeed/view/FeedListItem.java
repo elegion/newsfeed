@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.elegion.newsfeed.R;
-import com.elegion.newsfeed.sqlite.Feed;
+import com.elegion.newsfeed.sqlite.FeedProvider;
 import com.elegion.newsfeed.widget.CursorBinder;
 import com.elegion.newsfeed.widget.FeedIconView;
 
@@ -52,20 +52,20 @@ public class FeedListItem extends LinearLayout implements CursorBinder {
     @Override
     @SuppressLint("StringFormatMatches")
     public void bindCursor(Cursor c) {
-        mIcon.loadIcon(Feed.getIconUrl(c));
-        final String title = Feed.getTitle(c);
+        mIcon.loadIcon(FeedProvider.getIconUrl(c));
+        final String title = FeedProvider.getTitle(c);
         if (!TextUtils.isEmpty(title)) {
             mTitle.setText(title);
         } else {
-            mTitle.setText(getResources().getString(R.string.feed_p, Feed.getId(c)));
+            mTitle.setText(getResources().getString(R.string.feed_p, FeedProvider.getId(c)));
         }
-        final String link = Feed.getLink(c);
+        final String link = FeedProvider.getLink(c);
         if (!TextUtils.isEmpty(link)) {
             mLink.setText(link);
         } else {
-            mLink.setText(Feed.getRssLink(c));
+            mLink.setText(FeedProvider.getRssLink(c));
         }
-        final long pubDate = Feed.getPubDate(c);
+        final long pubDate = FeedProvider.getPubDate(c);
         if (pubDate > 0) {
             mPubDate.setText(DateFormat.getDateTimeInstance().format(new Date(pubDate)));
         }

@@ -23,8 +23,8 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.elegion.newsfeed.sqlite.Feed;
-import com.elegion.newsfeed.sqlite.News;
+import com.elegion.newsfeed.sqlite.FeedProvider;
+import com.elegion.newsfeed.sqlite.NewsProvider;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -128,18 +128,18 @@ public class RssFeedParser implements Closeable {
             if (eventType == XmlPullParser.START_TAG && xpp.getDepth() == CHANNEL_INFO_DEPTH) {
                 final String nodeName = xpp.getName();
                 if (TextUtils.equals(TITLE, nodeName)) {
-                    channelValues.put(Feed.Columns.TITLE, xpp.nextText());
+                    channelValues.put(FeedProvider.Columns.TITLE, xpp.nextText());
                 } else if (TextUtils.equals(LINK, nodeName)) {
-                    channelValues.put(Feed.Columns.LINK, xpp.nextText());
+                    channelValues.put(FeedProvider.Columns.LINK, xpp.nextText());
                 } else if (TextUtils.equals(PUB_DATE, nodeName)) {
-                    channelValues.put(Feed.Columns.PUB_DATE, RssDate.parse(xpp.nextText()).getTime());
+                    channelValues.put(FeedProvider.Columns.PUB_DATE, RssDate.parse(xpp.nextText()).getTime());
                 } else if (TextUtils.equals(LANGUAGE, nodeName)) {
-                    channelValues.put(Feed.Columns.LANGUAGE, xpp.nextText());
+                    channelValues.put(FeedProvider.Columns.LANGUAGE, xpp.nextText());
                 } else if (TextUtils.equals(IMAGE, nodeName)) {
                     onChannelImageNode(xpp, channelValues);
                 } else if (TextUtils.equals(ITEM, nodeName)) {
                     final ContentValues itemValues = new ContentValues();
-                    itemValues.put(News.Columns.FEED_ID, feedId);
+                    itemValues.put(NewsProvider.Columns.FEED_ID, feedId);
                     onChannelItemNode(xpp, itemValues);
                     channelItemValuesList.add(itemValues);
                 }
@@ -147,11 +147,11 @@ public class RssFeedParser implements Closeable {
             eventType = xpp.next();
         }
         syncResult.stats.numUpdates += provider
-                .update(Feed.URI, channelValues, Feed.Columns._ID + "=?", new String[]{feedId});
+                .update(FeedProvider.URI, channelValues, FeedProvider.Columns._ID + "=?", new String[]{feedId});
         syncResult.stats.numDeletes += provider
-                .delete(News.URI, News.Columns.FEED_ID + "=?", new String[]{feedId});
+                .delete(NewsProvider.URI, NewsProvider.Columns.FEED_ID + "=?", new String[]{feedId});
         syncResult.stats.numUpdates += provider
-                .bulkInsert(News.URI, channelItemValuesList.toArray(new ContentValues[channelItemValuesList.size()]));
+                .bulkInsert(NewsProvider.URI, channelItemValuesList.toArray(new ContentValues[channelItemValuesList.size()]));
     }
 
     protected void onChannelImageNode(XmlPullParser xpp, ContentValues channelValues)
@@ -163,7 +163,7 @@ public class RssFeedParser implements Closeable {
             if (eventType == XmlPullParser.START_TAG
                     && xpp.getDepth() == IMAGE_INFO_DEPTH
                     && TextUtils.equals(URL, xpp.getName())) {
-                channelValues.put(Feed.Columns.IMAGE_URL, xpp.nextText());
+                channelValues.put(FeedProvider.Columns.IMAGE_URL, xpp.nextText());
             }
             eventType = xpp.next();
         }
@@ -178,13 +178,13 @@ public class RssFeedParser implements Closeable {
             if (eventType == XmlPullParser.START_TAG && xpp.getDepth() == ITEM_INFO_DEPTH) {
                 final String nodeName = xpp.getName();
                 if (TextUtils.equals(TITLE, nodeName)) {
-                    itemValues.put(News.Columns.TITLE, xpp.nextText());
+                    itemValues.put(NewsProvider.Columns.TITLE, xpp.nextText());
                 } else if (TextUtils.equals(LINK, nodeName)) {
-                    itemValues.put(News.Columns.LINK, xpp.nextText());
+                    itemValues.put(NewsProvider.Columns.LINK, xpp.nextText());
                 } else if (TextUtils.equals(PUB_DATE, nodeName)) {
-                    itemValues.put(News.Columns.PUB_DATE, RssDate.parse(xpp.nextText()).getTime());
+                    itemValues.put(NewsProvider.Columns.PUB_DATE, RssDate.parse(xpp.nextText()).getTime());
                 } else if (TextUtils.equals(AUTHOR, nodeName)) {
-                    itemValues.put(News.Columns.AUTHOR, xpp.nextText());
+                    itemValues.put(NewsProvider.Columns.AUTHOR, xpp.nextText());
                 }
             }
             eventType = xpp.next();

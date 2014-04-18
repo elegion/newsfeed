@@ -18,6 +18,7 @@ package com.elegion.newsfeed.activity;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -26,7 +27,7 @@ import android.view.MenuItem;
 
 import com.elegion.newsfeed.R;
 import com.elegion.newsfeed.fragment.NewsList;
-import com.elegion.newsfeed.sqlite.Feed;
+import com.elegion.newsfeed.sqlite.FeedProvider;
 
 /**
  * @author Daniel Serdyukov
@@ -65,10 +66,9 @@ public class NewsActivity extends Activity implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == R.id.feeds_loader) {
             return new CursorLoader(
-                    getApplicationContext(), Feed.URI, null,
-                    Feed.Columns._ID + "=?",
-                    new String[]{String.valueOf(mFeedId)},
-                    null
+                    getApplicationContext(),
+                    ContentUris.withAppendedId(FeedProvider.URI, mFeedId),
+                    null, null, null, null
             );
         }
         return null;
@@ -77,7 +77,7 @@ public class NewsActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (loader.getId() == R.id.feeds_loader && data.moveToFirst()) {
-            getActionBar().setTitle(Feed.getTitle(data));
+            getActionBar().setTitle(FeedProvider.getTitle(data));
         }
     }
 

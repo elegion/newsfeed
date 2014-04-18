@@ -31,7 +31,7 @@ import android.widget.CursorAdapter;
 import com.elegion.newsfeed.AppDelegate;
 import com.elegion.newsfeed.R;
 import com.elegion.newsfeed.activity.NewsActivity;
-import com.elegion.newsfeed.sqlite.Feed;
+import com.elegion.newsfeed.sqlite.FeedProvider;
 import com.elegion.newsfeed.widget.CursorBinderAdapter;
 
 /**
@@ -54,7 +54,7 @@ public class FeedList extends SwipeToRefreshList implements LoaderManager.Loader
         if (id == R.id.feeds_loader) {
             return new CursorLoader(
                     getActivity().getApplicationContext(),
-                    Feed.URI, null, null, null, null
+                    FeedProvider.URI, null, null, null, null
             );
         }
         return null;
@@ -91,8 +91,8 @@ public class FeedList extends SwipeToRefreshList implements LoaderManager.Loader
         final Cursor feed = mListAdapter.getCursor();
         if (feed.moveToPosition(position)) {
             getActivity().getContentResolver().delete(
-                    Feed.URI, Feed.Columns._ID + "=?",
-                    new String[]{String.valueOf(Feed.getId(feed))}
+                    FeedProvider.URI, FeedProvider.Columns._ID + "=?",
+                    new String[]{String.valueOf(FeedProvider.getId(feed))}
             );
         }
     }

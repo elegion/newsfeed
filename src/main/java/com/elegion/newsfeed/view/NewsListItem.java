@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.elegion.newsfeed.R;
-import com.elegion.newsfeed.sqlite.News;
+import com.elegion.newsfeed.sqlite.NewsProvider;
 import com.elegion.newsfeed.widget.CursorBinder;
 
 import java.text.DateFormat;
@@ -48,9 +48,9 @@ public class NewsListItem extends LinearLayout implements CursorBinder {
     @Override
     @SuppressLint("StringFormatMatches")
     public void bindCursor(Cursor c) {
-        mTitle.setText(News.getTitle(c));
-        mAuthor.setText(News.getAuthor(c));
-        final long pubDate = News.getPubDate(c);
+        mTitle.setText(NewsProvider.getTitle(c));
+        mAuthor.setText(NewsProvider.getAuthor(c));
+        final long pubDate = NewsProvider.getPubDate(c);
         if (pubDate > 0) {
             mPubDate.setText(DateFormat.getDateTimeInstance().format(new Date(pubDate)));
         }

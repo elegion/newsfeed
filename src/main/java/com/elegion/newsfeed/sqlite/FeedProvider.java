@@ -16,21 +16,27 @@
 
 package com.elegion.newsfeed.sqlite;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.BaseColumns;
+
+import com.elegion.newsfeed.AppDelegate;
+import com.elegion.newsfeed.sync.SyncAdapter;
 
 /**
  * @author Daniel Serdyukov
  */
-public class News extends SQLiteTable {
+public class FeedProvider extends SQLiteTableProvider {
 
-    public static final String TABLE_NAME = "news";
+    public static final String TABLE_NAME = "feeds";
 
     public static final Uri URI = Uri.parse("content://com.elegion.newsfeed/" + TABLE_NAME);
 
-    public News() {
+    public FeedProvider() {
         super(TABLE_NAME);
     }
 
@@ -38,12 +44,12 @@ public class News extends SQLiteTable {
         return c.getLong(c.getColumnIndex(Columns._ID));
     }
 
-    public static String getTitle(Cursor c) {
-        return c.getString(c.getColumnIndex(Columns.TITLE));
+    public static String getIconUrl(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.IMAGE_URL));
     }
 
-    public static String getAuthor(Cursor c) {
-        return c.getString(c.getColumnIndex(Columns.AUTHOR));
+    public static String getTitle(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.TITLE));
     }
 
     public static String getLink(Cursor c) {
@@ -54,26 +60,48 @@ public class News extends SQLiteTable {
         return c.getLong(c.getColumnIndex(Columns.PUB_DATE));
     }
 
+    public static String getRssLink(Cursor c) {
+        return c.getString(c.getColumnIndex(Columns.RSS_LINK));
+    }
+
+    @Override
+    public Uri getBaseUri() {
+        return URI;
+    }
+
+    @Override
+    public void onContentChanged(Context context, int operation, Bundle extras) {
+        if (operation == INSERT) {
+            extras.keySet();
+            final Bundle syncExtras = new Bundle();
+            syncExtras.putLong(SyncAdapter.KEY_FEED_ID, extras.getLong(KEY_LAST_ID, -1));
+            ContentResolver.requestSync(AppDelegate.sAccount, AppDelegate.AUTHORITY, syncExtras);
+        }
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table if not exists " + TABLE_NAME +
                 "(" + Columns._ID + " integer primary key on conflict replace, "
                 + Columns.TITLE + " text, "
                 + Columns.LINK + " text, "
-                + Columns.AUTHOR + " text, "
+                + Columns.IMAGE_URL + " text, "
+                + Columns.LANGUAGE + " text, "
                 + Columns.PUB_DATE + " integer, "
-                + Columns.FEED_ID + " integer);");
-        db.execSQL("create index if not exists " +
-                TABLE_NAME + "_" + Columns.FEED_ID + "_index" +
-                " on " + TABLE_NAME + "(" + Columns.FEED_ID + ");");
+                + Columns.RSS_LINK + " text unique on conflict ignore)");
+        db.execSQL("create trigger if not exists after delete on " + TABLE_NAME +
+                " begin " +
+                " delete from " + NewsProvider.TABLE_NAME + " where " + NewsProvider.Columns.FEED_ID + "=old." + Columns._ID + ";" +
+                " end;");
     }
 
     public interface Columns extends BaseColumns {
         String TITLE = "title";
         String LINK = "link";
+        String IMAGE_URL = "imageUrl";
+        String LANGUAGE = "language";
         String PUB_DATE = "pubDate";
-        String AUTHOR = "author";
-        String FEED_ID = "feedId";
+        String RSS_LINK = "rssLink";
     }
 
 }
