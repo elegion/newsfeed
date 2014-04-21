@@ -48,7 +48,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
                               SyncResult syncResult) {
-        Log.i("SyncAdapter", "onPerformSync");
         final long feedId = extras.getLong(KEY_FEED_ID, -1);
         if (feedId > 0) {
             syncFeeds(provider, syncResult, FeedProvider.Columns._ID + "=?", new String[]{String.valueOf(feedId)});

@@ -123,6 +123,16 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
 
     }
 
+    public void setListAdapter(ListAdapter adapter) {
+        final DataSetObserver dataSetObserver = mSwipeToDismissController.getDataSetObserver();
+        final ListAdapter oldAdapter = mListView.getAdapter();
+        if (oldAdapter != null) {
+            oldAdapter.unregisterDataSetObserver(dataSetObserver);
+        }
+        mListView.setAdapter(adapter);
+        adapter.registerDataSetObserver(dataSetObserver);
+    }
+
     protected void onRefresh(Account account) {
 
     }
@@ -133,16 +143,6 @@ public class SwipeToRefreshList extends Fragment implements SwipeRefreshLayout.O
 
     protected void setRefreshing(boolean refreshing) {
         mRefresher.setRefreshing(refreshing);
-    }
-
-    public void setListAdapter(ListAdapter adapter) {
-        final DataSetObserver dataSetObserver = mSwipeToDismissController.getDataSetObserver();
-        final ListAdapter oldAdapter = mListView.getAdapter();
-        if (oldAdapter != null) {
-            oldAdapter.unregisterDataSetObserver(dataSetObserver);
-        }
-        mListView.setAdapter(adapter);
-        adapter.registerDataSetObserver(dataSetObserver);
     }
 
 }
